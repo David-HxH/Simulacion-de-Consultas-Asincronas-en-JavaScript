@@ -1,46 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    class Libro {
-        
-        constructor (titulo, autor, estado) {
-            this.titulo = titulo;
-            this.autor = autor;
-            this.estado = estado;
-        }
+  // Objeto que representa a un usuario (antes var → ahora const)
+  const usuario = {
+    nombre: "Ana",
+    edad: 24,
+    ciudad: "Barcelona",
+  };
 
-        mostrarInfo () {
-            console.log(`El libro "${this.titulo}" de ${this.autor} se encuentra ${this.estado}.`);
-        }
+  // NUEVO CODIGO REFACTORIZADO
+  const crearMensajePresentacion = ({ nombre, edad, ciudad }) => {
+    return `Hola, mi nombre es ${nombre}, tengo ${edad} años y vivo en la ciudad de ${ciudad}.`;
+  };
 
-    }
-
-    const inventario = [];
-
-    const agregarLibro = (titulo, autor, estado) => {
-        const nuevoLibro = new Libro(titulo, autor, estado);
-        inventario.push(nuevoLibro);
-    }
-
-    let confirmar = confirm("¿Desea agregar un nuevo libro al inventario?");
-    
-    while (confirmar) {
-        const titulo = prompt("Ingrese el título del libro:").trim();
-        const autor = prompt("Ingrese el autor del libro:").trim();
-        const estado = prompt("Ingrese el estado del libro (disponible/prestado):").trim().toLowerCase();
-
-        agregarLibro(titulo, autor, estado);
-
-        confirmar = confirm("¿Desea agregar otro libro al inventario?");
-
-        if (!confirmar) {
-            console.log("Inventario final de libros:");
-            for (const libro of inventario) {
-                libro.mostrarInfo();
-            }
-        }
-        
-    }
-
-
+  const mensajeDeBienvenidaRefactorizado = crearMensajePresentacion(usuario);
+  console.log(mensajeDeBienvenidaRefactorizado);
 
 });
+
