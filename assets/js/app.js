@@ -1,19 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const imagenPrincipal = document.querySelector("#imagen-principal");
+  const thumbnails = document.querySelectorAll(".thumbnail");
+  const contenedorPrincipal = document.querySelector("#imagen-principal-container");
 
-  // Objeto que representa a un usuario (antes var → ahora const)
-  const usuario = {
-    nombre: "Ana",
-    edad: 24,
-    ciudad: "Barcelona",
-  };
+  thumbnails.forEach(thumbnail => {
+    thumbnail.addEventListener("click", () => {
+      // Obtener src y alt del thumbnail clickeado
+      const nuevaSrc = thumbnail.src;
+      const nuevoAlt = thumbnail.alt || ""; // fallback por si no tiene alt
 
-  // NUEVO CODIGO REFACTORIZADO
-  const crearMensajePresentacion = ({ nombre, edad, ciudad }) => {
-    return `Hola, mi nombre es ${nombre}, tengo ${edad} años y vivo en la ciudad de ${ciudad}.`;
-  };
+      // Actualizar la imagen principal (src y alt)
+      imagenPrincipal.src = nuevaSrc;
+      imagenPrincipal.alt = nuevoAlt;
 
-  const mensajeDeBienvenidaRefactorizado = crearMensajePresentacion(usuario);
-  console.log(mensajeDeBienvenidaRefactorizado);
+      // Eliminar pie de foto anterior si existe
+      const pieExistente = document.querySelector("#pie-de-foto");
+      if (pieExistente) {
+        pieExistente.remove();
+      }
 
+      // Crear nuevo pie de foto
+      const pie = document.createElement("p");
+      pie.id = "pie-de-foto";
+      pie.textContent = nuevoAlt;
+
+      // Añadir el pie al contenedor de la imagen principal
+      contenedorPrincipal.appendChild(pie);
+    });
+  });
 });
-
