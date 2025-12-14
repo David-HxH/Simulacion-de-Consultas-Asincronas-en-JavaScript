@@ -1,31 +1,163 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const imagenPrincipal = document.querySelector("#imagen-principal");
-  const thumbnails = document.querySelectorAll(".thumbnail");
-  const contenedorPrincipal = document.querySelector("#imagen-principal-container");
+  console.log("Inicio de la cadena de llamadas API con callbacks...");
 
-  thumbnails.forEach(thumbnail => {
-    thumbnail.addEventListener("click", () => {
-      // Obtener src y alt del thumbnail clickeado
-      const nuevaSrc = thumbnail.src;
-      const nuevoAlt = thumbnail.alt || ""; // fallback por si no tiene alt
+  /*
+  Simulación de Funciones de API
+  Estas funciones simulan llamadas a una red. No las modifiques.
+*/
 
-      // Actualizar la imagen principal (src y alt)
-      imagenPrincipal.src = nuevaSrc;
-      imagenPrincipal.alt = nuevoAlt;
-
-      // Eliminar pie de foto anterior si existe
-      const pieExistente = document.querySelector("#pie-de-foto");
-      if (pieExistente) {
-        pieExistente.remove();
+  // API para obtener datos de un usuario
+  const obtenerUsuario = (id, callback) => {
+    // Simula una demora aleatoria entre 0.5 y 1.5 segundos
+    const demora = Math.random() * 1000 + 500;
+    setTimeout(() => {
+      // Simula un posible error
+      if (!id) {
+        callback("Error: ID de usuario no proporcionado.", null);
+        return;
       }
+      console.log(`Buscando usuario con ID: ${id}...`);
+      const usuario = {
+        id: id,
+        nombre: "John Doe",
+        email: "john.doe@example.com",
+      };
+      callback(null, usuario);
+    }, demora);
+  };
 
-      // Crear nuevo pie de foto
-      const pie = document.createElement("p");
-      pie.id = "pie-de-foto";
-      pie.textContent = nuevoAlt;
+  // API para obtener los posts de un usuario
+  const obtenerPosts = (userId, callback) => {
+    const demora = Math.random() * 1000 + 500;
+    setTimeout(() => {
+      if (!userId) {
+        callback(
+          "Error: ID de usuario no proporcionado para buscar posts.",
+          null
+        );
+        return;
+      }
+      console.log(`Buscando posts del usuario con ID: ${userId}...`);
+      const posts = [
+        { id: 101, titulo: "Mi primer post", contenido: "..." },
+        { id: 102, titulo: "Mi segundo post", contenido: "..." },
+      ];
+      callback(null, posts);
+    }, demora);
+  };
 
-      // Añadir el pie al contenedor de la imagen principal
-      contenedorPrincipal.appendChild(pie);
-    });
-  });
+  // API para obtener los comentarios de un post
+  const obtenerComentarios = (postId, callback) => {
+    const demora = Math.random() * 1000 + 500;
+    setTimeout(() => {
+      if (!postId) {
+        callback(
+          "Error: ID de post no proporcionado para buscar comentarios.",
+          null
+        );
+        return;
+      }
+      console.log(`Buscando comentarios del post con ID: ${postId}...`);
+      const comentarios = [
+        { id: 1, texto: "¡Excelente post!" },
+        { id: 2, texto: "Muy informativo, gracias." },
+      ];
+      callback(null, comentarios);
+    }, demora);
+  };
+
+  // ===============================
+  // PARTE 1: CALLBACK HELL
+  // ===============================
+
+  //   obtenerUsuario(1, (errorUsuario, usuario) => {
+  //     if (errorUsuario) {
+  //       console.error(errorUsuario);
+  //       return;
+  //     }
+
+  //     obtenerPosts(usuario.id, (errorPosts, posts) => {
+  //       if (errorPosts) {
+  //         console.error(errorPosts);
+  //         return;
+  //       }
+
+  //       obtenerComentarios(posts[0].id, (errorComentarios, comentarios) => {
+  //         if (errorComentarios) {
+  //           console.error(errorComentarios);
+  //           return;
+  //         }
+
+  //         console.log("Comentarios obtenidos:", comentarios);
+  //       });
+  //     });
+  //   });
+
+  // ===============================
+  // Capa Adaptadora: Conversión de Callbacks a Promesas
+  // ===============================
+
+  //   const obtenerUsuarioPromesa = (id) => {
+  //     return new Promise((resolve, reject) => {
+  //       obtenerUsuario(id, (error, usuario) => {
+  //         if (error) reject(error);
+  //         else resolve(usuario);
+  //       });
+  //     });
+  //   };
+
+  //   const obtenerPostsPromesa = (userId) => {
+  //     return new Promise((resolve, reject) => {
+  //       obtenerPosts(userId, (error, posts) => {
+  //         if (error) reject(error);
+  //         else resolve(posts);
+  //       });
+  //     });
+  //   };
+
+  //   const obtenerComentariosPromesa = (postId) => {
+  //     return new Promise((resolve, reject) => {
+  //       obtenerComentarios(postId, (error, comentarios) => {
+  //         if (error) reject(error);
+  //         else resolve(comentarios);
+  //       });
+  //     });
+  //   };
+
+  // ===============================
+  // PARTE 2: PROMESAS
+  // ===============================
+
+  //   obtenerUsuarioPromesa(1)
+  //     .then((usuario) => {
+  //       return obtenerPostsPromesa(usuario.id);
+  //     })
+  //     .then((posts) => {
+  //       return obtenerComentariosPromesa(posts[0].id);
+  //     })
+  //     .then((comentarios) => {
+  //       console.log("Comentarios obtenidos:", comentarios);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+
+  // ===============================
+  // PARTE 3: ASYNC / AWAIT
+  // ===============================
+
+  // async function mostrarPerfilDeUsuario() {
+  //   try {
+  //     const usuario = await obtenerUsuarioPromesa(1);
+  //     const posts = await obtenerPostsPromesa(usuario.id);
+  //     const comentarios = await obtenerComentariosPromesa(posts[0].id);
+
+  //     console.log("Comentarios obtenidos:", comentarios);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // }
+
+  // // Ejecutar
+  // mostrarPerfilDeUsuario();
 });
